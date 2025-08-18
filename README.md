@@ -1,12 +1,49 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# app_reading 專案說明
 
-Currently, two official plugins are available:
+`app_reading` 是一個結合 React + Vite 前端與 FastAPI 後端的全端範例專案，適合用於學習、展示或快速啟動全端架構。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 專案架構
 
-## Expanding the ESLint configuration
+- **前端**：
+	- 使用 React 框架，搭配 Vite 作為開發與建構工具。
+	- 主要檔案：`src/App.jsx`（計數器範例）、`src/main.jsx`、`index.html`。
+	- 樣式檔案：`src/App.css`、`src/index.css`。
+	- 依賴管理：`package.json`。
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **後端**：
+	- 使用 FastAPI 建立 API，範例路由 `/app/hello` 回傳 JSON。
+	- 主要檔案：`api/index.py`。
+	- 依賴管理：`requirements.txt`（fastapi、uvicorn）。
+
+- **部署設定**：
+	- `vercel.json` 設定 Vercel 路由，將 `/app/*` 請求導向 FastAPI，其他導向前端頁面。
+
+- **開發工具**：
+	- ESLint 設定檔（`eslint.config.js`）用於前端程式碼檢查。
+
+## 如何啟動
+
+### 前端
+```bash
+npm install
+npm run dev
+```
+
+### 後端
+```bash
+pip install -r requirements.txt
+uvicorn api.index:app --reload
+```
+
+## 主要功能
+
+- 前端：展示 Vite + React 計數器範例，支援熱模組替換（HMR）。
+- 後端：提供 `/app/hello` API，回傳 `{"Hello": "World"}`。
+- 可部署於 Vercel，支援前後端分離架構。
+
+## 適用對象
+
+- 想學習 React + Vite 前端開發者
+- 想快速體驗 FastAPI 後端 API
+- 需要全端範例或快速啟動專案架構者

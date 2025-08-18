@@ -1,11 +1,59 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLogin, setIsLogin] = useState(false);
+  const [error, setError] = useState("");
 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+    const formData = new FormData();
+    formData.append("username", username);
+    formData.append("password", password);
+    const res = await fetch("/app/login", {
+      method: "POST",
+      body: formData,
+    });
+    const data = await res.json();
+    if (data.success) {
+      setIsLogin(true);
+    } else {
+      setError(data.msg || "登入失敗");
+    }
+  };
+
+  if (!isLogin) {
+    return (
+      <div className="card">
+        <h2>請登入</h2>
+        <form onSubmit={handleLogin}>
+          <div>
+            <input
+              type="text"
+              placeholder="帳號"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <input
+              type="password"
+              placeholder="密碼"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit">登入</button>
+        </form>
+        {error && <p style={{color:'red'}}>{error}</p>}
+      </div>
+    );
+  }
+
+  // 登入後顯示原本內容
   return (
     <>
       <div>
@@ -29,7 +77,7 @@ function App() {
         Click on the Vite and React logos to learn more
       </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
