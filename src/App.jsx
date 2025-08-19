@@ -9,6 +9,7 @@ function App() {
   const [isLogin, setIsLogin] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [count, setCount] = useState(0);
 
   const handleLogin = async (e) => {
     e.preventDefault();
