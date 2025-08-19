@@ -2,29 +2,42 @@ import { useState } from 'react';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
+
 function App() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLogin, setIsLogin] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
-    const formData = new FormData();
-    formData.append("username", username);
-    formData.append("password", password);
-    const res = await fetch("/app/login", {
-      method: "POST",
-      body: formData,
-    });
-    const data = await res.json();
-    if (data.success) {
-      setIsLogin(true);
-    } else {
-      setError(data.msg || "登入失敗");
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("username", username);
+      formData.append("password", password);
+      const res = await fetch("/app/login", {
+        method: "POST",
+        body: formData,
+      });
+      if (!res.ok) {
+        throw new Error("伺服器錯誤");
+      }
+      const data = await res.json();
+      if (data.success) {
+        setIsLogin(true);
+      } else {
+        setError(data.msg || "登入失敗");
+      }
+    } catch (err) {
+      setError(err.message || "網路錯誤");
+    } finally {
+      setLoading(false);
     }
   };
+
 
   if (!isLogin) {
     return (
@@ -38,6 +51,7 @@ function App() {
               value={username}
               onChange={e => setUsername(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
           <div>
@@ -47,9 +61,10 @@ function App() {
               value={password}
               onChange={e => setPassword(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
-          <button type="submit">登入</button>
+          <button type="submit" disabled={loading}>{loading ? "登入中..." : "登入"}</button>
         </form>
         {error && <p style={{color:'red'}}>{error}</p>}
       </div>
